@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main(void) {
+    char text[1000];
+    int i, c, p;
+
+    printf("Enter affine ciphertext: ");
+    fgets(text, sizeof(text), stdin);
+
+    /* Frequency assumptions: B -> E and U -> T.
+       This gives a = 3, b = 15; inverse of 3 mod 26 is 9. */
+    for (i = 0; text[i] != '\0'; i++) {
+        if (isupper((unsigned char)text[i])) {
+            c = text[i] - 'A';
+            p = (9 * (c - 15 + 26)) % 26;
+            text[i] = (char)('A' + p);
+        } else if (islower((unsigned char)text[i])) {
+            c = text[i] - 'a';
+            p = (9 * (c - 15 + 26)) % 26;
+            text[i] = (char)('a' + p);
+        }
+    }
+
+    printf("Decrypted text: %s", text);
+    return 0;
+}
